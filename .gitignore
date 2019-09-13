@@ -1,3 +1,4 @@
+pyvenv.cfg
 *.pyc
 __pycache__
 *.csv
@@ -5,3 +6,4 @@ __pycache__
 /bin
 /include
 /.idea
+/share

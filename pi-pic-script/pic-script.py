@@ -36,7 +36,7 @@ while 1:
         if now < sunInfo['dawn']:
             print('Sun has not risen. No picture taken')
         else:
-            print('Sun is up take a photo. Count: %s' % (str(now), str(pictures)))
+            print('Sun is up take a photo. Count: %s' % (str(pictures)))
             timeStamp = strftime("%Y-%m-%d_%X")     # YYYY-mm-dd_time
             fileName = '8_towhee_' + timeStamp + '.jpg'
             camera.annotate_text = fileName

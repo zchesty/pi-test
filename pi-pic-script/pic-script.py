@@ -19,6 +19,7 @@ pst=pytz.timezone('US/Pacific')
 
 camera = PiCamera()
 camera.resolution = (1024, 768)
+camera.led = False
 
 bucketName = 'image-upload-4793'
 s3 = boto3.resource('s3')

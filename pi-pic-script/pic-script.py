@@ -4,7 +4,6 @@ from time import sleep, strftime
 from picamera import PiCamera
 import datetime
 import pytz
-from utils.s3_utils import clearBucket
 import astral
 
 
@@ -42,7 +41,12 @@ while 1:
             camera.annotate_text = fileName
             camera.capture(fileName)
 
-            clearBucket(bucketName)
+            keys = []
+            for s3_file in bucket.objects.all():
+                keys.append({'Key': s3_file.key})
+            bucket.delete_objects(Delete={
+                'Objects': keys
+            })
             bucket.upload_file(fileName, fileName)
             os.remove(fileName)
 

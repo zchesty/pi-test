@@ -2,46 +2,41 @@ import boto3
 import os
 from time import sleep, strftime
 from picamera import PiCamera
-import astral
 import datetime
 import pytz
+from utils.s3_utils import clearBucket
+from utils.time_utils.py import getDayLight
 
 pst=pytz.timezone('US/Pacific')
-a = astral.Astral()
 
 camera = PiCamera()
 camera.resolution = (1024, 768)
 
+bucketName = 'image-upload-4793'
 s3 = boto3.resource('s3')
-bucket = s3.Bucket('image-upload-4793')
-
-city_name = 'SunriverOR'
-
-# create astral location object for sunriver Oregon
-l = astral.Location((city_name, 'USA', 43.8694, -121.4334, 'US/Pacific', 4164)) # name, region, lat, long, timezone, elevation
+bucket = s3.Bucket(bucketName)
 
 while 1:
     dateToday = datetime.date.today() # get todays date
+    sunInfo = getDayLight(dateToday)
 
-    sunInfo = l.sun(dateToday, local=True) # Get Sun information for Location
-
-    print('Dawn:    %s' % str(sunInfo['dawn']))
-    print('Dusk:    %s' % str(sunInfo['dusk']))
-
-    pictures = 0
+    pictures = 1
     now = pst.localize(datetime.datetime.now()) # get the time of now
 
     while now < sunInfo['dusk']: # While it is earlier than dusk repeat
         if now < sunInfo['dawn']:
-            print('sun has not risen %s' % str(now))
+            print('Sun has not risen. No picture taken')
         else:
-            print('sun is up take a photo %s picture: %s' % (str(now), str(pictures)))
+            print('Sun is up take a photo. Count: %s' % (str(now), str(pictures)))
             timeStamp = strftime("%Y-%m-%d_%X")     # YYYY-mm-dd_time
             fileName = '8_towhee_' + timeStamp + '.jpg'
             camera.annotate_text = fileName
             camera.capture(fileName)
+
+            clearBucket(bucketName)
             bucket.upload_file(fileName, fileName)
             os.remove(fileName)
+
             pictures = pictures + 1
         sleep(900)
         now = pst.localize(datetime.datetime.now()) # get the time of now

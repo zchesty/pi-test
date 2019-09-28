@@ -9,12 +9,12 @@ import astral
 
 
 
-def getDayLight(date):
-    city_name = 'SunriverOR'
-    # create astral location object for sunriver Oregon
-    l = astral.Location((city_name, 'USA', 43.8694, -121.4334, 'US/Pacific', 4164)) # name, region, lat, long, timezone, elevation
-    l.sun(date, local=True) # Get Sun information for Location
-    return l
+
+city_name = 'SunriverOR'
+# create astral location object for sunriver Oregon
+l = astral.Location((city_name, 'USA', 43.8694, -121.4334, 'US/Pacific', 4164)) # name, region, lat, long, timezone, elevation
+
+
 
 pst=pytz.timezone('US/Pacific')
 
@@ -27,7 +27,7 @@ bucket = s3.Bucket(bucketName)
 
 while 1:
     dateToday = datetime.date.today() # get todays date
-    sunInfo = getDayLight(dateToday)
+    sunInfo = l.sun(dateToday, local=True) # Get Sun information for Location
 
     pictures = 1
     now = pst.localize(datetime.datetime.now()) # get the time of now

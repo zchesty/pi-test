@@ -45,9 +45,10 @@ while 1:
             keys = []
             for s3_file in bucket.objects.all():
                 keys.append({'Key': s3_file.key})
-            bucket.delete_objects(Delete={
-                'Objects': keys
-            })
+            if len(keys) > 0:
+                bucket.delete_objects(Delete={
+                    'Objects': keys
+                })
             bucket.upload_file(fileName, fileName)
             os.remove(fileName)
 

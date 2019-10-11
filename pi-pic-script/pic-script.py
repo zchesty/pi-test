@@ -6,14 +6,9 @@ import datetime
 import pytz
 import astral
 
-
-
-
 city_name = 'SunriverOR'
 # create astral location object for sunriver Oregon
 l = astral.Location((city_name, 'USA', 43.8694, -121.4334, 'US/Pacific', 4164)) # name, region, lat, long, timezone, elevation
-
-
 
 pst=pytz.timezone('US/Pacific')
 
@@ -52,7 +47,7 @@ while 1:
             os.remove(fileName)
 
             pictures = pictures + 1
-        sleep(900)
+        sleep(1800)
         now = pst.localize(datetime.datetime.now()) # get the time of now
 
     print('Finished Taking pictures for the day sun has gone. Total pictues: %s' % str(pictures))

@@ -36,13 +36,7 @@ while 1:
             camera.annotate_text = fileName
             camera.capture(fileName)
 
-            keys = []
-            for s3_file in bucket.objects.all():
-                keys.append({'Key': s3_file.key})
-            if len(keys) > 0:
-                bucket.delete_objects(Delete={
-                    'Objects': keys
-                })
+            bucket.objects.all().delete()
             bucket.upload_file(fileName,'public/' + fileName)
             os.remove(fileName)
 

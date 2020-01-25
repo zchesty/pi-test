@@ -20,7 +20,7 @@ pst=pytz.timezone('US/Pacific')
 camera = PiCamera()
 camera.resolution = (1024, 768)
 
-bucketName = 'image-upload-4793'
+bucketName = 'sunriver-display-s3-prod'
 s3 = boto3.resource('s3')
 bucket = s3.Bucket(bucketName)
 
@@ -48,11 +48,11 @@ while 1:
                 bucket.delete_objects(Delete={
                     'Objects': keys
                 })
-            bucket.upload_file(fileName, fileName)
+            bucket.upload_file(fileName,'public/' + fileName)
             os.remove(fileName)
 
             pictures = pictures + 1
-        sleep(900)
+        sleep(1800)
         now = pst.localize(datetime.datetime.now()) # get the time of now
 
     print('Finished Taking pictures for the day sun has gone. Total pictues: %s' % str(pictures))
